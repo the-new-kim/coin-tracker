@@ -35,7 +35,6 @@ a {
         color: ${(props) => props.theme.hoverColor};
       }
     }
-
     svg {
     width: 30%;
     transition: fill ease-out 300ms;
@@ -48,12 +47,13 @@ a {
 
 h1,h2,h3,h4,h5 {
 	font-weight: 500;
-	text-transform: uppercase;
+	/* text-transform: uppercase; */
 }
 h1 {font-size: 1.7em}
 h2 {font-size: 1.6em}
 h3 {font-size: 1.2em}
 h4 {font-size: 1em}
+
 
 
 
@@ -66,8 +66,7 @@ const Wrapper = styled.div`
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 0 30px;
+  padding: 0 10px;
 `;
 
 function App() {

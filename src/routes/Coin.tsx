@@ -1,23 +1,15 @@
 import { motion } from "framer-motion";
-import ReactApexChart from "react-apexcharts";
 import { useQuery } from "react-query";
 import { Link, Outlet, useMatch, useParams } from "react-router-dom";
-import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import {
-  fetchCoinDetail,
-  fetchHistoricalTickers,
-  fetchOHLC,
-  fetchTickers,
-} from "../api";
-import { isDarkModeAtom } from "../atoms";
+import { fetchCoinDetail, fetchOHLC, fetchTickers } from "../api";
+import Chart from "../components/Chart";
 import Header from "../components/Header";
 
 const Board = styled(motion.div)`
   width: 100%;
   min-height: 80px;
   background-color: ${(props) => props.theme.boardBgColor};
-  color: ${(props) => props.theme.textColor};
   border-radius: 20px;
   margin-bottom: 10px;
   padding: 20px;
@@ -27,7 +19,8 @@ const Board = styled(motion.div)`
 `;
 
 const Price = styled.div<{ $isRising: boolean }>`
-  color: ${(props) => (props.$isRising ? "green" : "red")};
+  color: ${(props) =>
+    props.$isRising ? props.theme.textGreen : props.theme.textRed};
   > *:first-child {
     margin-bottom: 5px;
   }
@@ -45,10 +38,6 @@ const OHLC = styled.div`
     }
   }
 `;
-const Chart = styled.div`
-  width: 100%;
-  padding: 10px;
-`;
 
 const Tabs = styled.div`
   display: grid;
@@ -64,7 +53,7 @@ const Tab = styled(Board)<{ $isMatch?: boolean }>`
     props.$isMatch ? props.theme.activeColor : props.theme.textColor};
 `;
 
-interface ICoinDetail {
+interface ICoinDetailData {
   id: string;
   name: string;
   symbol: string;
@@ -90,7 +79,7 @@ interface ICoinDetail {
   last_data_at: string;
 }
 
-interface IOhlc {
+interface IOhlcData {
   time_open: string;
   time_close: string;
   open: number;
@@ -101,7 +90,7 @@ interface IOhlc {
   market_cap: number;
 }
 
-interface ITickers {
+interface ITickersData {
   id: string;
   name: string;
   symbol: string;
@@ -134,12 +123,6 @@ interface ITickers {
     };
   };
 }
-interface IHistoricalTickers {
-  timestamp: string;
-  price: number;
-  volume_24h: number;
-  market_cap: number;
-}
 
 const priceOptions = {
   style: "currency",
@@ -156,44 +139,34 @@ function Coin() {
   const newsMatch = useMatch("/:coinId/news");
   const priceMatch = useMatch("/:coinId/price");
 
-  const isDarkMode = useRecoilValue(isDarkModeAtom);
   const { coinId } = useParams();
-  const { isLoading: loadingDetail, data: dataDetail } = useQuery<ICoinDetail>(
-    ["detail", coinId],
-    () => fetchCoinDetail(coinId!)
-  );
 
-  const { isLoading: loadingOhlc, data: dataOhlc } = useQuery<IOhlc[]>(
+  const { isLoading: loadingDetail, data: dataDetail } =
+    useQuery<ICoinDetailData>(["detail", coinId], () =>
+      fetchCoinDetail(coinId!)
+    );
+
+  const { isLoading: loadingOhlc, data: dataOhlc } = useQuery<IOhlcData[]>(
     ["ohlc", coinId],
     () => fetchOHLC(coinId!)
   );
 
-  const { isLoading: loadingTickers, data: dataTickers } = useQuery<ITickers>(
-    ["tickers", coinId],
-    () => fetchTickers(coinId!),
-    {
+  const { isLoading: loadingTickers, data: dataTickers } =
+    useQuery<ITickersData>(["tickers", coinId], () => fetchTickers(coinId!), {
       refetchInterval: 60000,
-    }
-  );
+    });
 
-  const { isLoading: loadingHistoricalTickers, data: dataHistoricalTickers } =
-    useQuery<IHistoricalTickers[]>(["historicalTickers", coinId], () =>
-      fetchHistoricalTickers(coinId!)
-    );
-
-  const isLoading =
+  const loading =
     loadingDetail ||
     loadingOhlc ||
     loadingTickers ||
-    loadingHistoricalTickers ||
     !dataDetail ||
     !dataOhlc ||
-    !dataTickers ||
-    !dataHistoricalTickers;
+    !dataTickers;
 
   return (
     <>
-      {isLoading ? null : (
+      {loading ? null : (
         <>
           <Header siteTitle={dataDetail.name} />
           <Board>
@@ -222,13 +195,13 @@ function Coin() {
                 <div>open: </div>
                 <div>
                   {dataOhlc[0].open.toLocaleString("en-US", ohlcOptions)}
-                </div>{" "}
+                </div>
               </div>
               <div>
                 <div>hight: </div>
                 <div>
                   {dataOhlc[0].high.toLocaleString("en-US", ohlcOptions)}
-                </div>{" "}
+                </div>
               </div>
               <div>
                 <div>low: </div>
@@ -240,57 +213,11 @@ function Coin() {
                 <div>close: </div>
                 <div>
                   {dataOhlc[0].close.toLocaleString("en-US", ohlcOptions)}
-                </div>{" "}
+                </div>
               </div>
             </OHLC>
           </Board>
-          <Chart>
-            <ReactApexChart
-              type="line"
-              series={[
-                {
-                  name: "Price",
-                  data: dataHistoricalTickers.map((ticker) => ticker.price),
-                },
-              ]}
-              options={{
-                theme: {
-                  mode: `${isDarkMode ? "dark" : "light"}`,
-                },
-                chart: {
-                  toolbar: {
-                    show: true,
-                  },
-                  background: "transparent",
-                },
-                grid: { show: true },
-                stroke: {
-                  curve: "smooth",
-                  width: 2,
-                },
-                yaxis: {
-                  show: false,
-                },
-                xaxis: {
-                  axisBorder: { show: false },
-                  axisTicks: { show: false },
-                  labels: { show: false },
-                  categories: dataHistoricalTickers.map((ticker) => {
-                    const date = new Date(ticker.timestamp).toLocaleDateString(
-                      "en-US",
-                      {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      }
-                    );
-                    return `${date} `;
-                  }),
-                },
-              }}
-            />
-            <div>{dataDetail.description}</div>
-          </Chart>
+          <Chart />
           <Tabs>
             <Link to="price">
               <Tab $isMatch={priceMatch ? true : false}>Price</Tab>

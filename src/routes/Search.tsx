@@ -1,114 +1,34 @@
-import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import styled from "styled-components";
-import { fetchCoins } from "../api";
-import { motion } from "framer-motion";
-import useViewportScroll from "../hooks/useViewportScroll";
-import { Link } from "react-router-dom";
-
+import { useLocation } from "react-router-dom";
+import { searchCoins } from "../api";
 import Header from "../components/Header";
+import { coinVariants, ICoinData, numberOfCoinsOnEachPage } from "./Coins";
 import Loader from "../components/Loader";
 
-export const CoinBoards = styled(motion.ul)`
-  width: 100%;
-`;
-export const CoinBoard = styled(motion.li)`
-  position: relative;
-  width: 100%;
-  min-height: 80px;
-  background: ${(props) => props.theme.border.background};
-  border-radius: 20px;
-  margin-bottom: 10px;
-  overflow: hidden;
+import {
+  CoinBoards,
+  CoinBoard,
+  CoinLink,
+  Symbol,
+  Name,
+  Arrow,
+  LoaderBoard,
+} from "./Coins";
+import { useEffect, useState } from "react";
+import useViewportScroll from "../hooks/useViewportScroll";
 
-  * {
-    z-index: 2;
-  }
-
-  ::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    background: ${(props) => props.theme.border.hover.background};
-    z-index: 1;
-    transition: opacity ease-out 300ms;
-  }
-
-  :hover {
-    ::after {
-      opacity: 1;
-    }
-  }
-`;
-export const CoinLink = styled(Link)`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-`;
-export const Symbol = styled.img`
-  width: 40px;
-  height: 40px;
-  margin-right: 20px;
-`;
-export const Name = styled.div`
-  text-align: left;
-  flex-grow: 2;
-`;
-export const Arrow = styled.div`
-  width: 40px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-`;
-export const LoaderBoard = styled(motion.div)`
-  position: relative;
-  width: 100%;
-  min-height: 80px;
-  background: ${(props) => props.theme.border.background};
-  border-radius: 20px;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-export interface ICoinData {
-  id: string;
-  name: string;
-  symbol: string;
-  rank: number;
-  is_new: boolean;
-  is_active: boolean;
-  type: string;
+interface ISearchCoinsData {
+  currencies: ICoinData[];
 }
 
-export const coinVariants = {
-  initial: {
-    scale: 0,
-  },
-  animate: {
-    scale: 1,
-    transition: {
-      duration: 0.3,
-      delay: 0.1,
-    },
-  },
-};
+function Search() {
+  const location = useLocation();
+  const keyword = new URLSearchParams(location.search).get("keyword");
+  const { isLoading, data } = useQuery<ISearchCoinsData>(
+    ["search", keyword],
+    () => searchCoins(keyword || "")
+  );
 
-export const numberOfCoinsOnEachPage = 20;
-
-function Coins() {
-  const { data, isLoading } = useQuery<ICoinData[]>(["coins"], fetchCoins);
   const { scrollYProgress } = useViewportScroll();
   const [page, setPage] = useState(numberOfCoinsOnEachPage);
 
@@ -120,7 +40,7 @@ function Coins() {
     const increasePage = () => {
       if (typeof data !== "undefined")
         setPage((prev) => {
-          const difference = data.length - prev;
+          const difference = data.currencies.length - prev;
           if (difference === 0) return prev;
           return difference < numberOfCoinsOnEachPage
             ? prev + difference
@@ -143,11 +63,11 @@ function Coins() {
       <Loader isLoading={isLoading} />
       {isLoading ? null : (
         <>
-          <Header siteTitle="Coins" />
-          {!data || !Array.isArray(data) ? null : (
+          <Header siteTitle={`Search results of "${keyword}"`} />
+          {!data || !Array.isArray(data.currencies) ? null : (
             <>
               <CoinBoards>
-                {data.slice(0, page).map(({ name, id, symbol }) => (
+                {data.currencies.slice(0, page).map(({ name, id, symbol }) => (
                   <CoinBoard
                     variants={coinVariants}
                     initial="initial"
@@ -171,7 +91,7 @@ function Coins() {
                   </CoinBoard>
                 ))}
               </CoinBoards>
-              {page >= data.length ? null : (
+              {page >= data.currencies.length ? null : (
                 <LoaderBoard
                   variants={coinVariants}
                   initial="initial"
@@ -190,4 +110,4 @@ function Coins() {
   );
 }
 
-export default Coins;
+export default Search;

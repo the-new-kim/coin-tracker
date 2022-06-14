@@ -1,16 +1,30 @@
-import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { AnimatePresence, motion, useViewportScroll } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { isDarkModeAtom, saveDarkMode } from "../atoms";
+import useOutsideClick from "../hooks/useOutsiteClick";
 
 const Wrapper = styled.header`
+  position: relative;
   width: 100%;
+  margin: 30px 0;
+  display: grid;
+  grid-template-columns: 2fr 6fr 1fr 1fr;
 
-  color: ${(props) => props.theme.textColor};
+  > * {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+`;
+
+const InnerWarpper = styled.div`
+  position: relative;
+  width: 100%;
   border-radius: 20px;
-  margin: 10px 0;
 
   display: grid;
   grid-template-columns: 2fr 6fr 1fr 1fr;
@@ -21,7 +35,8 @@ const Wrapper = styled.header`
     align-items: center;
   }
 `;
-const Back = styled.div`
+
+const BackBtn = styled.div`
   width: 100%;
   min-width: 80px;
   height: 100%;
@@ -39,8 +54,31 @@ const Back = styled.div`
   }
 `;
 const Title = styled.h1`
-  padding: 30px;
+  text-align: center;
 `;
+
+const Search = styled.form`
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+`;
+
+const SearchInput = styled(motion.input)`
+  width: 100%;
+  /* padding: 10px; */
+  background: ${(props) => props.theme.border.background};
+  border: 1px solid rgb(60, 63, 68);
+  color: ${(props) => props.theme.textColor};
+  appearance: none;
+  font-size: 1.7em;
+  :focus {
+    outline: none;
+    box-shadow: none;
+    border-color: rgb(255, 255, 255);
+  }
+`;
+
 const Icon = styled.div`
   margin: auto;
   height: auto;
@@ -58,22 +96,95 @@ const Icon = styled.div`
   }
 `;
 const SearchIcon = styled(Icon)`
-  opacity: 0;
-  visibility: hidden;
+  /* opacity: 0;
+  visibility: hidden; */
 `;
 const DarkModeIcon = styled(Icon)``;
+
+const TopBtn = styled(motion.div)`
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  z-index: 2;
+  border: 0;
+  cursor: pointer;
+
+  svg {
+    width: 100%;
+    height: 100%;
+
+    path {
+      transition: stroke ease-out 300ms;
+      stroke: ${(props) => props.theme.textColor};
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  }
+
+  :hover {
+    svg {
+      path {
+        stroke: ${(props) => props.theme.hoverColor};
+      }
+    }
+  }
+`;
+
+const topBtnVariants = {
+  hide: {
+    scale: 0,
+    opacity: 0,
+  },
+  show: {
+    scale: 1,
+    opacity: 1,
+  },
+  bigger: {
+    scale: 1.2,
+  },
+};
 
 interface IHeaderProps {
   siteTitle: string;
 }
 
+interface IForm {
+  keyword: string;
+}
+
 function Header({ siteTitle }: IHeaderProps) {
   const [isHome, setIsHome] = useState(true);
   const [isDarkMode, setIsDarkMode] = useRecoilState(isDarkModeAtom);
+  const [topBtnVisble, setTopBtnVisble] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const { scrollY } = useViewportScroll();
+  const navigate = useNavigate();
 
   const toggleDarkMode = () => {
     setIsDarkMode((prev) => !prev);
   };
+
+  const toggleSearchOpen = () => {
+    setSearchOpen((prev) => !prev);
+  };
+
+  const { register, handleSubmit, setValue, setFocus } = useForm<IForm>();
+
+  const onValid = ({ keyword }: IForm) => {
+    navigate(`/search?keyword=${keyword}`);
+    setValue("keyword", "");
+  };
+
+  useEffect(() => {
+    scrollY.onChange(() => {
+      scrollY.get() > window.innerHeight
+        ? setTopBtnVisble(true)
+        : setTopBtnVisble(false);
+    });
+  }, [scrollY]);
 
   useEffect(() => {
     saveDarkMode(isDarkMode);
@@ -83,13 +194,38 @@ function Header({ siteTitle }: IHeaderProps) {
     siteTitle !== "Coins" ? setIsHome(false) : setIsHome(true);
   }, [siteTitle]);
 
+  const scrollToTop = () => {
+    window.scrollTo(0, 0);
+  };
+
   return (
     <>
       {/* <Helmet>
         <title>{siteTitle}</title>
       </Helmet> */}
+      <AnimatePresence>
+        {topBtnVisble && (
+          <TopBtn
+            variants={topBtnVariants}
+            initial="hide"
+            animate="show"
+            exit="hide"
+            whileHover="bigger"
+            onClick={scrollToTop}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M3.35288 8.95043C4.00437 6.17301 6.17301 4.00437 8.95043 3.35288C10.9563 2.88237 13.0437 2.88237 15.0496 3.35288C17.827 4.00437 19.9956 6.17301 20.6471 8.95044C21.1176 10.9563 21.1176 13.0437 20.6471 15.0496C19.9956 17.827 17.827 19.9956 15.0496 20.6471C13.0437 21.1176 10.9563 21.1176 8.95044 20.6471C6.17301 19.9956 4.00437 17.827 3.35288 15.0496C2.88237 13.0437 2.88237 10.9563 3.35288 8.95043Z" />
+              <path d="M9.5 13L12 10.5L14.5 13" />
+            </svg>
+          </TopBtn>
+        )}
+      </AnimatePresence>
       <Wrapper>
-        <Back>
+        <BackBtn>
           {isHome ? null : (
             <Link to="/">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
@@ -97,10 +233,18 @@ function Header({ siteTitle }: IHeaderProps) {
               </svg>
             </Link>
           )}
-        </Back>
+        </BackBtn>
+        {searchOpen ? (
+          <Search onSubmit={handleSubmit(onValid)}>
+            <SearchInput
+              {...register("keyword", { required: true })}
+            ></SearchInput>
+          </Search>
+        ) : (
+          <Title>{siteTitle}</Title>
+        )}
 
-        <Title>{siteTitle}</Title>
-        <SearchIcon>
+        <SearchIcon onClick={toggleSearchOpen}>
           <svg
             version="1.1"
             id="Capa_1"

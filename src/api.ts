@@ -22,13 +22,36 @@ export function fetchOHLC(coinId: string) {
   );
 }
 
-export function fetchHistoricalTickers(coinId: string) {
+export enum HistoricalTickersRange {
+  WEEK = "1w",
+  MONTH = "1m",
+  THREE_M = "3m",
+  SIX_M = "6m",
+}
+
+export function fetchHistoricalTickers(
+  coinId: string,
+  range: HistoricalTickersRange
+) {
   const endDate = Math.floor(Date.now() / 1000);
   const day = 60 * 60 * 24;
+  const week = day * 7;
+  const month = week * 4;
+  const threeMonthes = month * 3;
+  const sixMonthes = day * 182;
+  const defaultRange = sixMonthes;
 
   return fetch(
     `${BASE_URL}tickers/${coinId}/historical?start=${
-      endDate - day * 30
+      range === HistoricalTickersRange.WEEK
+        ? endDate - week
+        : range === HistoricalTickersRange.MONTH
+        ? endDate - month
+        : range === HistoricalTickersRange.THREE_M
+        ? endDate - threeMonthes
+        : range === HistoricalTickersRange.SIX_M
+        ? endDate - sixMonthes
+        : endDate - defaultRange
     }&end=${endDate}&interval=1d`
   ).then((response) => response.json());
 }
@@ -41,6 +64,12 @@ export function fetchEvents(coinId: string) {
 
 export function fetchTwitter(coinId: string) {
   return fetch(`${BASE_URL}coins/${coinId}/twitter`).then((response) =>
+    response.json()
+  );
+}
+
+export function searchCoins(keyword: string) {
+  return fetch(`${BASE_URL}search?q=${keyword}`).then((response) =>
     response.json()
   );
 }

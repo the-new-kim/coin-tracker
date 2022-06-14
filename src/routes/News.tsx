@@ -18,7 +18,6 @@ const Board = styled(motion.div)`
   width: 100%;
   min-height: 80px;
   background-color: ${(props) => props.theme.boardBgColor};
-  color: ${(props) => props.theme.textColor};
   border-radius: 20px;
   margin-bottom: 10px;
   padding: 20px;
