@@ -13,22 +13,7 @@ const Wrapper = styled.header`
   margin: 30px 0;
   display: grid;
   grid-template-columns: 2fr 6fr 1fr 1fr;
-
-  > * {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-`;
-
-const InnerWarpper = styled.div`
-  position: relative;
-  width: 100%;
-  border-radius: 20px;
-
-  display: grid;
-  grid-template-columns: 2fr 6fr 1fr 1fr;
-
+  /* min-height: 80px; */
   > * {
     display: flex;
     justify-content: center;
@@ -39,7 +24,7 @@ const InnerWarpper = styled.div`
 const BackBtn = styled.div`
   width: 100%;
   min-width: 80px;
-  height: 100%;
+  /* height: 100%; */
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -53,25 +38,42 @@ const BackBtn = styled.div`
     padding: 10px 0;
   }
 `;
-const Title = styled.h1`
+const TitleAndSearch = styled.div`
+  position: relative;
+  > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+`;
+
+const Title = styled(motion.h1)`
   text-align: center;
 `;
 
-const Search = styled.form`
+const Search = styled(motion.form)`
   width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
+  transition: opacity ease-out 300ms;
 `;
 
 const SearchInput = styled(motion.input)`
+  text-align: center;
   width: 100%;
   /* padding: 10px; */
-  background: ${(props) => props.theme.border.background};
-  border: 1px solid rgb(60, 63, 68);
+  background: ${(props) => props.theme.bgColor};
+  border: none;
+  border-bottom: 1px solid rgb(60, 63, 68);
+  border-radius: 0;
   color: ${(props) => props.theme.textColor};
   appearance: none;
   font-size: 1.7em;
+  padding: 0;
+  margin: 0;
   :focus {
     outline: none;
     box-shadow: none;
@@ -103,17 +105,19 @@ const DarkModeIcon = styled(Icon)``;
 
 const TopBtn = styled(motion.div)`
   position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 40px;
-  height: 40px;
-  z-index: 2;
+  bottom: 0;
+  right: 0;
+  width: 70px;
+  height: 70px;
+  z-index: 100;
   border: 0;
   cursor: pointer;
+  padding: 10px;
 
   svg {
     width: 100%;
     height: 100%;
+    z-index: 101;
 
     path {
       transition: stroke ease-out 300ms;
@@ -171,12 +175,25 @@ function Header({ siteTitle }: IHeaderProps) {
     setSearchOpen((prev) => !prev);
   };
 
-  const { register, handleSubmit, setValue, setFocus } = useForm<IForm>();
+  const searchIconRef = useRef<HTMLDivElement>(null);
+  const formRef = useOutsideClick<HTMLFormElement, HTMLDivElement>(
+    searchOpen,
+    toggleSearchOpen,
+    searchIconRef
+  );
+  const { register, handleSubmit, setValue, setFocus, unregister } =
+    useForm<IForm>();
 
   const onValid = ({ keyword }: IForm) => {
     navigate(`/search?keyword=${keyword}`);
     setValue("keyword", "");
   };
+
+  useEffect(() => {
+    searchOpen
+      ? setFocus("keyword", { shouldSelect: searchOpen })
+      : unregister("keyword");
+  }, [searchOpen]);
 
   useEffect(() => {
     scrollY.onChange(() => {
@@ -234,17 +251,35 @@ function Header({ siteTitle }: IHeaderProps) {
             </Link>
           )}
         </BackBtn>
-        {searchOpen ? (
-          <Search onSubmit={handleSubmit(onValid)}>
-            <SearchInput
-              {...register("keyword", { required: true })}
-            ></SearchInput>
-          </Search>
-        ) : (
-          <Title>{siteTitle}</Title>
-        )}
-
-        <SearchIcon onClick={toggleSearchOpen}>
+        <TitleAndSearch>
+          <AnimatePresence>
+            {searchOpen ? (
+              <Search
+                key="search"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                ref={formRef}
+                onSubmit={handleSubmit(onValid)}
+              >
+                <SearchInput
+                  {...register("keyword", { required: true })}
+                  placeholder="Search"
+                ></SearchInput>
+              </Search>
+            ) : (
+              <Title
+                key="title"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                {siteTitle}
+              </Title>
+            )}
+          </AnimatePresence>
+        </TitleAndSearch>
+        <SearchIcon ref={searchIconRef} onClick={toggleSearchOpen}>
           <svg
             version="1.1"
             id="Capa_1"

@@ -16,14 +16,18 @@ const useOutsideClick = <T extends HTMLElement, TT extends HTMLElement>(
     const exceptionElement = exception.current;
 
     const handleClick = (event: MouseEvent) => {
-      if (initialState && !exceptionElement.contains(event.target as Node))
+      if (
+        initialState &&
+        !exceptionElement.contains(event.target as Node) &&
+        !element.contains(event.target as Node)
+      )
         onClick();
     };
 
     document.addEventListener("click", handleClick);
 
     return () => document.removeEventListener("click", handleClick);
-  }, [initialState, onClick]);
+  }, [initialState, onClick, exception]);
 
   return ref;
 };

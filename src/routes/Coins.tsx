@@ -32,6 +32,7 @@ export const CoinBoard = styled(motion.li)`
     left: 0;
     width: 100%;
     height: 100%;
+    border-radius: inherit;
     opacity: 0;
     background: ${(props) => props.theme.border.hover.background};
     z-index: 1;
