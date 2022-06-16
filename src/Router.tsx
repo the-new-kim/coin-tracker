@@ -1,8 +1,16 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+
 import Layout from "./Layout";
-import Detail from "./routes/Detail";
+
 import Home from "./routes/Home";
-import Info from "./routes/Info";
+
+import Detail from "./routes/Detail";
+
+// import Chart from "./components/Chart";
+import Details from "./routes/Details";
+import Events from "./routes/Events";
+import Twitter from "./routes/Twitter";
+import Team from "./routes/Team";
 
 import Search from "./routes/Search";
 
@@ -13,7 +21,10 @@ function Router() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path=":id" element={<Detail />}>
-            <Route path="info" element={<Info />} />
+            <Route path="details" element={<Details />} />
+            <Route path="events" element={<Events />} />
+            <Route path="twitter" element={<Twitter />} />
+            <Route path="team" element={<Team />} />
           </Route>
           <Route path="search" element={<Search />} />
         </Route>

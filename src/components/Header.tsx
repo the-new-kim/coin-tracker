@@ -144,6 +144,7 @@ function Header() {
   const onValid = ({ keyword }: IForm) => {
     navigate(`/search?keyword=${keyword}`);
     setValue("keyword", "");
+    toggleSearchOpen();
   };
 
   useEffect(() => {

@@ -11,7 +11,7 @@ function Home() {
 
   useEffect(() => {
     setSiteTitle(HOME_TITLE);
-  }, []);
+  }, [setSiteTitle]);
 
   return <>{data ? <CoinList data={data} /> : "no data"}</>;
 }

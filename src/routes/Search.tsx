@@ -2,13 +2,9 @@ import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { useLocation } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
-import { ICoinData, searchCoins } from "../api";
+import { ISearchCoinsData, searchCoins } from "../api";
 import { siteTitleAtom } from "../atoms";
 import CoinList from "../components/CoinList";
-
-interface ISearchCoinsData {
-  currencies: ICoinData[];
-}
 
 function Search() {
   const location = useLocation();
@@ -21,7 +17,7 @@ function Search() {
 
   useEffect(() => {
     setSiteTitle(`Search result of "${keyword}"`);
-  }, []);
+  }, [keyword, setSiteTitle]);
 
   return <>{data ? <CoinList data={data.currencies} /> : "no data"}</>;
 }

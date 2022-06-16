@@ -12,7 +12,7 @@ const Wrapper = styled.div`
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  padding: 0 10px;
+  padding: 0 10px 50px;
 `;
 
 function Layout() {

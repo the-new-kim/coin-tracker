@@ -1,5 +1,7 @@
 const BASE_URL = "https://api.coinpaprika.com/v1/";
 
+//Data Interfaces
+//HOME
 export interface ICoinData {
   id: string;
   name: string;
@@ -8,6 +10,89 @@ export interface ICoinData {
   is_new: boolean;
   is_active: boolean;
   type: string;
+}
+//DETAIL
+export interface ICoinDetailData {
+  id: string;
+  name: string;
+  symbol: string;
+  rank: number;
+  is_new: boolean;
+  is_active: boolean;
+  type: string;
+  tags: object;
+  team: {
+    id: string;
+    name: string;
+    position: string;
+  }[];
+  description: string;
+  message: string;
+  open_source: boolean;
+  started_at: string;
+  development_status: string;
+  hardware_wallet: boolean;
+  proof_type: string;
+  org_structure: object;
+  hash_algorithm: string;
+  links: object;
+  links_extended: object;
+  whitepaper: {
+    link: string;
+    thumbnail: string;
+  };
+  first_data_at: string;
+  last_data_at: string;
+}
+
+export interface IOhlcData {
+  time_open: string;
+  time_close: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+  market_cap: number;
+}
+
+export interface ITickersData {
+  id: string;
+  name: string;
+  symbol: string;
+  rank: number;
+  circulating_supply: number;
+  total_supply: number;
+  max_supply: number;
+  beta_value: number;
+  first_data_at: string;
+  last_updated: string;
+  quotes: {
+    USD: {
+      price: number;
+      volume_24h: number;
+      volume_24h_change_24h: number;
+      market_cap: number;
+      market_cap_change_24h: number;
+      percent_change_15m: number;
+      percent_change_30m: number;
+      percent_change_1h: number;
+      percent_change_6h: number;
+      percent_change_12h: number;
+      percent_change_24h: number;
+      percent_change_7d: number;
+      percent_change_30d: number;
+      percent_change_1y: number;
+      ath_price: number;
+      ath_date: string;
+      percent_from_price_ath: number;
+    };
+  };
+}
+
+//SEARCH
+export interface ISearchCoinsData {
+  currencies: ICoinData[];
 }
 
 export function fetchCoins() {
@@ -66,10 +151,37 @@ export function fetchHistoricalTickers(
   ).then((response) => response.json());
 }
 
+//Events
+
+export interface IEventsData {
+  id: string;
+  date: string;
+  date_to: string;
+  name: string;
+  description: string;
+  is_conference: boolean;
+  link: string;
+  proof_image_link: string;
+}
+
 export function fetchEvents(coinId: string) {
   return fetch(`${BASE_URL}coins/${coinId}/events`).then((response) =>
     response.json()
   );
+}
+
+export interface ITwitterData {
+  date: string;
+  user_name: string;
+  user_image_link: string;
+  status: string;
+  is_retweet: boolean;
+  retweet_count: number;
+  like_count: number;
+  status_link: string;
+  status_id: string;
+  media_link: string;
+  youtube_link: string;
 }
 
 export function fetchTwitter(coinId: string) {
