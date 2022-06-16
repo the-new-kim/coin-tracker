@@ -61,7 +61,7 @@ function Details() {
           ) : (
             <Link to={{ pathname: dataDetail.whitepaper.link }} target="_blank">
               {dataDetail.whitepaper.thumbnail ? (
-                <img src={dataDetail.whitepaper.thumbnail} />
+                <img src={dataDetail.whitepaper.thumbnail} alt="whitepaper" />
               ) : (
                 "download"
               )}

@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { AnimateSharedLayout, motion } from "framer-motion";
 import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { Outlet, useParams } from "react-router-dom";
@@ -31,7 +31,7 @@ const PriceBoard = styled(motion.div)`
   gap: 10px;
 `;
 
-const CurrentPrice = styled.div<{ $isRising: boolean }>`
+const CurrentPrice = styled(motion.div)<{ $isRising: boolean }>`
   grid-area: price;
   color: ${(props) =>
     props.$isRising ? props.theme.textGreen : props.theme.textRed};
@@ -39,7 +39,7 @@ const CurrentPrice = styled.div<{ $isRising: boolean }>`
     margin-bottom: 5px;
   }
 `;
-const OHLC = styled.div`
+const OHLC = styled(motion.div)`
   grid-area: ohlc;
   display: flex;
   flex-direction: column;
@@ -53,7 +53,7 @@ const OHLC = styled.div`
     }
   }
 `;
-const Change = styled.div`
+const Change = styled(motion.div)`
   grid-area: change;
   display: flex;
   justify-content: space-between;
@@ -102,13 +102,13 @@ function Detail() {
   useEffect(() => {
     if (!dataDetail) return;
     setSiteTitle(dataDetail.name);
-  }, [dataDetail]);
+  }, [dataDetail, setSiteTitle]);
 
   const noData = !dataOhlc || !dataTickers;
 
   return (
     <>
-      <PriceBoard>
+      <PriceBoard layout>
         {noData ? (
           "no data"
         ) : (
@@ -159,7 +159,12 @@ function Detail() {
                 </div>
               </div>
             </OHLC>
-            <Change>
+            <Change
+              layout
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0 }}
+              exit={{ opacity: 0 }}
+            >
               {dataTickers.quotes.USD.percent_change_1h ? (
                 <span>
                   <div>1h</div>
@@ -194,6 +199,7 @@ function Detail() {
           </>
         )}
       </PriceBoard>
+
       <Chart />
 
       {id && <DetailNav id={id} />}
