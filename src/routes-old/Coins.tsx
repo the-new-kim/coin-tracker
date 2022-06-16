@@ -6,8 +6,8 @@ import { motion } from "framer-motion";
 import useViewportScroll from "../hooks/useViewportScroll";
 import { Link } from "react-router-dom";
 
-import Header from "../components/Header";
-import Loader from "../components/Loader";
+import Header from "../components-old/Header";
+import Loader from "../components-old/Loader";
 
 export const CoinBoards = styled(motion.ul)`
   width: 100%;

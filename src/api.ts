@@ -1,5 +1,15 @@
 const BASE_URL = "https://api.coinpaprika.com/v1/";
 
+export interface ICoinData {
+  id: string;
+  name: string;
+  symbol: string;
+  rank: number;
+  is_new: boolean;
+  is_active: boolean;
+  type: string;
+}
+
 export function fetchCoins() {
   return fetch(`${BASE_URL}coins`).then((response) => response.json());
 }

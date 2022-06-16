@@ -12,6 +12,7 @@ const Wrapper = styled.div`
   width: 100%;
   padding: 10px;
 `;
+
 const Loader = styled(motion.div)`
   width: 100%;
   aspect-ratio: 1.53 / 1;
@@ -19,12 +20,14 @@ const Loader = styled(motion.div)`
   justify-content: center;
   align-items: center;
 `;
+
 const RangeTabs = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
 `;
-const Tab = styled(motion.div)<{ $isActive: boolean }>`
+
+const RangeTab = styled(motion.div)<{ $isActive: boolean }>`
   position: relative;
   background-color: ${(props) => props.theme.boardBgColor};
   border-radius: 10px;
@@ -42,7 +45,7 @@ const Tab = styled(motion.div)<{ $isActive: boolean }>`
   }
 `;
 
-const ActiveTab = styled(motion.div)`
+const ActiveBorder = styled(motion.div)`
   width: 100%;
   height: 100%;
   position: absolute;
@@ -70,99 +73,96 @@ const loaderVariants = {
 };
 
 function Chart() {
-  const { coinId } = useParams();
-
+  const { id } = useParams();
   const isDarkMode = useRecoilValue(isDarkModeAtom);
-
   const [chartRange, setChartRange] = useState(HistoricalTickersRange.SIX_M);
-
   const { isLoading, data } = useQuery<IHistoricalTickersData[]>(
-    ["historicalTickers", coinId, chartRange],
-    () => fetchHistoricalTickers(coinId!, chartRange)
+    ["historicalTickers", id, chartRange],
+    () => fetchHistoricalTickers(id!, chartRange),
+    {
+      suspense: false,
+    }
   );
 
   const loading = isLoading || !data;
 
   return (
-    <>
-      <Wrapper>
-        {loading ? (
-          <Loader
-            variants={loaderVariants}
-            initial="initial"
-            animate="animate"
-            exit="initial"
-          >
-            Loading...
-          </Loader>
-        ) : (
-          <ReactApexChart
-            type="line"
-            series={[
-              {
-                name: "Price",
-                data: data.map((ticker) => ticker.price),
+    <Wrapper>
+      {loading ? (
+        <Loader
+          variants={loaderVariants}
+          initial="initial"
+          animate="animate"
+          exit="initial"
+        >
+          Loading...
+        </Loader>
+      ) : (
+        <ReactApexChart
+          type="line"
+          series={[
+            {
+              name: "Price",
+              data: data.map((ticker) => ticker.price),
+            },
+          ]}
+          options={{
+            theme: {
+              mode: `${isDarkMode ? "dark" : "light"}`,
+            },
+            chart: {
+              toolbar: {
+                show: true,
               },
-            ]}
-            options={{
-              theme: {
-                mode: `${isDarkMode ? "dark" : "light"}`,
-              },
-              chart: {
-                toolbar: {
-                  show: true,
-                },
-                background: "transparent",
-              },
-              grid: { show: true },
-              stroke: {
-                curve: "smooth",
-                width: 2,
-              },
-              yaxis: {
-                show: false,
-              },
-              xaxis: {
-                axisBorder: { show: false },
-                axisTicks: { show: false },
-                labels: { show: false },
-                categories: data.map((ticker) => {
-                  const date = new Date(ticker.timestamp).toLocaleDateString(
-                    "en-US",
-                    {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    }
-                  );
-                  return `${date} `;
-                }),
-              },
-            }}
-          />
-        )}
+              background: "transparent",
+            },
+            grid: { show: true },
+            stroke: {
+              curve: "smooth",
+              width: 2,
+            },
+            yaxis: {
+              show: false,
+            },
+            xaxis: {
+              axisBorder: { show: false },
+              axisTicks: { show: false },
+              labels: { show: false },
+              categories: data.map((ticker) => {
+                const date = new Date(ticker.timestamp).toLocaleDateString(
+                  "en-US",
+                  {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  }
+                );
+                return `${date} `;
+              }),
+            },
+          }}
+        />
+      )}
 
-        <RangeTabs>
-          {Object.values(HistoricalTickersRange).map((value) => (
-            <Tab
-              $isActive={value === chartRange}
-              onClick={() => {
-                setChartRange(value);
-              }}
-              key={value}
-            >
-              {value}
-              <AnimatePresence>
-                {value === chartRange && !loading ? (
-                  <ActiveTab layoutId="chartRangeActive" />
-                ) : null}
-              </AnimatePresence>
-            </Tab>
-          ))}
-        </RangeTabs>
-        {/* <div>{dataDetail.description}</div> */}
-      </Wrapper>
-    </>
+      <RangeTabs>
+        {Object.values(HistoricalTickersRange).map((value) => (
+          <RangeTab
+            $isActive={value === chartRange}
+            onClick={() => {
+              setChartRange(value);
+            }}
+            key={value}
+          >
+            {value}
+            <AnimatePresence>
+              {value === chartRange && !loading ? (
+                <ActiveBorder layoutId="chartRangeActive" />
+              ) : null}
+            </AnimatePresence>
+          </RangeTab>
+        ))}
+      </RangeTabs>
+    </Wrapper>
   );
 }
 

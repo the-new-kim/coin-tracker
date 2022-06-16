@@ -17,3 +17,10 @@ export const isDarkModeAtom = atom<boolean>({
   key: "isDarkMode",
   default: loadDarkMode() ?? true,
 });
+
+export const HOME_TITLE = "Coins";
+
+export const siteTitleAtom = atom<string>({
+  key: "siteTitle",
+  default: HOME_TITLE,
+});

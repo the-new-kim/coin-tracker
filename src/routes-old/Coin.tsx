@@ -4,7 +4,7 @@ import { Link, Outlet, useMatch, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { fetchCoinDetail, fetchOHLC, fetchTickers } from "../api";
 import Chart from "../components/Chart";
-import Header from "../components/Header";
+import Header from "../components-old/Header";
 
 const Board = styled(motion.div)`
   width: 100%;
@@ -156,17 +156,20 @@ function Coin() {
       refetchInterval: 60000,
     });
 
-  const loading =
-    loadingDetail ||
-    loadingOhlc ||
-    loadingTickers ||
-    !dataDetail ||
-    !dataOhlc ||
-    !dataTickers;
+  const loading = loadingDetail || loadingOhlc || loadingTickers;
+
+  const noData = !dataDetail || !dataDetail.id || !dataOhlc || !dataTickers;
+
+  console.log("loading", loading);
+  console.log("nodata", noData);
 
   return (
     <>
-      {loading ? null : (
+      {loading ? (
+        "loading..."
+      ) : noData ? (
+        "no data"
+      ) : (
         <>
           <Header siteTitle={dataDetail.name} />
           <Board>
