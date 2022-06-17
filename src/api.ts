@@ -43,6 +43,7 @@ export interface ICoinDetailData {
   };
   first_data_at: string;
   last_data_at: string;
+  error?: string;
 }
 
 export interface IOhlcData {
@@ -88,6 +89,7 @@ export interface ITickersData {
       percent_from_price_ath: number;
     };
   };
+  error?: string;
 }
 
 //SEARCH

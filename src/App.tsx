@@ -54,7 +54,9 @@ h2 {font-size: 1.6em}
 h3 {font-size: 1.2em}
 h4 {font-size: 1em}
 
-
+hr {
+  border: solid 0.1px ${(props) => props.theme.textColor}
+}
 
 
 `;

@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { useSetRecoilState } from "recoil";

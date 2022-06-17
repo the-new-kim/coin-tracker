@@ -1,4 +1,4 @@
-import { AnimatePresence, motion, useViewportScroll } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -27,16 +27,25 @@ const BackBtn = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
+`;
+
+const BackBtnInnerWrapper = styled(motion.div)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  margin: auto 0;
+  height: auto;
+
   a {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 50%;
-    margin: auto 0;
-    height: auto;
+    width: 100%;
     padding: 10px 0;
   }
 `;
+
 const TitleAndSearch = styled.div`
   position: relative;
   > * {
@@ -151,7 +160,7 @@ function Header() {
     searchOpen
       ? setFocus("keyword", { shouldSelect: searchOpen })
       : unregister("keyword");
-  }, [searchOpen]);
+  }, [searchOpen, setFocus, unregister]);
 
   useEffect(() => {
     saveDarkMode(isDarkMode);
@@ -160,13 +169,21 @@ function Header() {
   return (
     <Wrapper>
       <BackBtn>
-        {isHome ? null : (
-          <Link to="/">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
-              <path d="M224 480c-8.188 0-16.38-3.125-22.62-9.375l-192-192c-12.5-12.5-12.5-32.75 0-45.25l192-192c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25L77.25 256l169.4 169.4c12.5 12.5 12.5 32.75 0 45.25C240.4 476.9 232.2 480 224 480z" />
-            </svg>
-          </Link>
-        )}
+        <AnimatePresence>
+          {isHome ? null : (
+            <BackBtnInnerWrapper
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <Link to="/">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                  <path d="M224 480c-8.188 0-16.38-3.125-22.62-9.375l-192-192c-12.5-12.5-12.5-32.75 0-45.25l192-192c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25L77.25 256l169.4 169.4c12.5 12.5 12.5 32.75 0 45.25C240.4 476.9 232.2 480 224 480z" />
+                </svg>
+              </Link>
+            </BackBtnInnerWrapper>
+          )}
+        </AnimatePresence>
       </BackBtn>
       <TitleAndSearch>
         <AnimatePresence>

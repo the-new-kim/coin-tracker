@@ -1,9 +1,7 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { fetchCoins } from "../api";
 import useViewportScroll from "../hooks/useViewportScroll";
 
 const CoinBoards = styled(motion.ul)`
@@ -67,7 +65,7 @@ const Arrow = styled.div`
   justify-content: flex-end;
   align-items: center;
 `;
-const LoaderBoard = styled(motion.div)`
+const ScrollLoader = styled(motion.div)`
   position: relative;
   width: 100%;
   min-height: 80px;
@@ -111,6 +109,11 @@ export const numberOfCoinsOnEachPage = 20;
 function CoinList({ data }: ICoinListProps) {
   const { scrollYProgress } = useViewportScroll();
   const [page, setPage] = useState(numberOfCoinsOnEachPage);
+  const [scrollHitsBottom, setScrollHitsBottom] = useState(false);
+
+  useEffect(() => {
+    setScrollHitsBottom(scrollYProgress === 1);
+  }, [scrollYProgress, scrollHitsBottom]);
 
   useEffect(() => {
     if (scrollYProgress !== 1) return;
@@ -161,15 +164,15 @@ function CoinList({ data }: ICoinListProps) {
         </CoinBoard>
       ))}
       {page >= data.length ? null : (
-        <LoaderBoard
-          variants={coinVariants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
+        <ScrollLoader
+          initial={{ scale: 0 }}
+          animate={{
+            scale: scrollHitsBottom ? 1 : 0,
+          }}
           key={page}
         >
           Loading...
-        </LoaderBoard>
+        </ScrollLoader>
       )}
     </CoinBoards>
   );

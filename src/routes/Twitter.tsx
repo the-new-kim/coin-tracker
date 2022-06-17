@@ -18,7 +18,10 @@ const Tweet = styled(motion.li)`
   border-radius: 20px;
   margin-bottom: 10px;
   overflow: hidden;
-  padding: 10px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   /* * {
     z-index: 2;
   } */
@@ -44,6 +47,12 @@ const Tweet = styled(motion.li)`
   } */
 `;
 
+const Status = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+`;
+
 interface IOutletContext {
   id: string;
 }
@@ -58,11 +67,15 @@ function Twitter() {
 
   return (
     <Wrapper>
-      {!data || !data.length
-        ? "no data"
-        : data.map(({ date, user_name, status, status_id }) => (
-            <Tweet key={status_id}>{status}</Tweet>
-          ))}
+      {!data || !data.length ? (
+        <Tweet>-</Tweet>
+      ) : (
+        data.map(({ date, user_name, status, status_id }) => (
+          <Tweet key={status_id}>
+            <Status>{status}</Status>
+          </Tweet>
+        ))
+      )}
     </Wrapper>
   );
 }

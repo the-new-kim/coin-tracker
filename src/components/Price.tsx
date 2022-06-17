@@ -7,13 +7,12 @@ import { fetchOHLC, fetchTickers, IOhlcData, ITickersData } from "../api";
 
 const PriceBoard = styled(motion.div)`
   width: 100%;
-  /* min-height: 80px; */
+
   background-color: ${(props) => props.theme.boardBgColor};
   border-radius: 20px;
   margin-bottom: 10px;
   padding: 20px;
-  /* display: flex;
-  flex-direction: column; */
+
   display: grid;
   grid-template-areas:
     "price ohlc"
@@ -62,6 +61,7 @@ const Button = styled(motion.button)`
   margin: 0;
   padding: 0;
   height: auto;
+  cursor: pointer;
 `;
 const ButtonIcon = styled(motion.div)`
   width: 15px;
@@ -105,7 +105,8 @@ function Price({ id }: IPriceProps) {
       refetchInterval: 60000,
     }
   );
-  const noData = !dataOhlc || !dataTickers;
+
+  const noData = !dataOhlc || !dataTickers || dataTickers.error; // think better way to handle errors... dataTickers.error
   return (
     <LayoutGroup>
       <PriceBoard layout>

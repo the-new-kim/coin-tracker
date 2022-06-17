@@ -1,4 +1,4 @@
-import { Link, useOutletContext } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 import styled from "styled-components";
 import { ICoinDetailData } from "../api";
 
@@ -59,13 +59,17 @@ function Details() {
           {dataDetail.whitepaper.link === null ? (
             "-"
           ) : (
-            <Link to={{ pathname: dataDetail.whitepaper.link }} target="_blank">
+            <a
+              href={dataDetail.whitepaper.link}
+              target="_blank"
+              rel="noreferrer"
+            >
               {dataDetail.whitepaper.thumbnail ? (
                 <img src={dataDetail.whitepaper.thumbnail} alt="whitepaper" />
               ) : (
                 "download"
               )}
-            </Link>
+            </a>
           )}
         </div>
       </Row>

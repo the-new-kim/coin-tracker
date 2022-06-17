@@ -13,6 +13,7 @@ import Twitter from "./routes/Twitter";
 import Team from "./routes/Team";
 
 import Search from "./routes/Search";
+import NotFound from "./routes/NotFound";
 
 function Router() {
   return (
@@ -28,6 +29,7 @@ function Router() {
           </Route>
           <Route path="search" element={<Search />} />
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );

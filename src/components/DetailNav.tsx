@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-import { Link } from "react-router-dom";
+import { Link, useMatch } from "react-router-dom";
 import styled from "styled-components";
 
 const Tabs = styled.div`
@@ -30,19 +30,24 @@ interface IDetailNavProps {
 }
 
 function DetailNav({ id }: IDetailNavProps) {
+  const detailsMatch = useMatch("/:id/details");
+  const eventsMatch = useMatch("/:id/events");
+  const twitterMatch = useMatch("/:id/twitter");
+  const teamMatch = useMatch("/:id/team");
+
   return (
     <Tabs>
       <Link to={`/${id}/details`}>
-        <Tab>Details</Tab>
+        <Tab $isMatch={!!detailsMatch}>Details</Tab>
       </Link>
       <Link to={`/${id}/events`}>
-        <Tab>Events</Tab>
+        <Tab $isMatch={!!eventsMatch}>Events</Tab>
       </Link>
       <Link to={`/${id}/twitter`}>
-        <Tab>Twitter</Tab>
+        <Tab $isMatch={!!twitterMatch}>Twitter</Tab>
       </Link>
       <Link to={`/${id}/team`}>
-        <Tab>Team</Tab>
+        <Tab $isMatch={!!teamMatch}>Team</Tab>
       </Link>
     </Tabs>
   );
