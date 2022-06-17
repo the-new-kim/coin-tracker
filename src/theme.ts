@@ -23,6 +23,7 @@ export const lightTheme: DefaultTheme = {
   activeColor: THEME_COLOR6,
   textRed: "rgb(205,61,61)",
   textGreen: "rgb(29,162,417)",
+  boardTitleBg: "rgb(210, 210, 210)",
 };
 
 export const darkTheme: DefaultTheme = {
@@ -40,4 +41,5 @@ export const darkTheme: DefaultTheme = {
   activeColor: THEME_COLOR6,
   textRed: "rgb(162,0,0)",
   textGreen: "rgb(40,161,154)",
+  boardTitleBg: "rgb(20, 20, 20)",
 };

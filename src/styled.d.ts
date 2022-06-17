@@ -18,5 +18,6 @@ declare module "styled-components" {
     activeColor: string;
     textRed: string;
     textGreen: string;
+    boardTitleBg: string;
   }
 }

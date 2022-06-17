@@ -16,7 +16,7 @@ const Category = styled.div`
     gap: 2px;
     > div {
       padding: 15px;
-      background-color: rgb(20, 20, 20);
+      background-color: ${(props) => props.theme.boardTitleBg};
     }
   }
 `;
