@@ -19,9 +19,12 @@ const Tweet = styled(motion.li)`
   margin-bottom: 10px;
   overflow: hidden;
   padding: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  grid-template-areas:
+    "status status"
+    "date user";
+
+  gap: 10px;
   /* * {
     z-index: 2;
   } */
@@ -47,10 +50,42 @@ const Tweet = styled(motion.li)`
   } */
 `;
 
-const Status = styled.div`
+const Status = styled.p`
+  grid-area: status;
   width: 100%;
   height: 100%;
+  text-overflow: ellipsis;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+`;
+
+const TweetDate = styled.div`
+  grid-area: date;
+  width: 100%;
   display: flex;
+  align-items: center;
+  justify-content: flex-start;
+`;
+
+const User = styled.div`
+  grid-area: user;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+`;
+
+const NoData = styled.div`
+  position: relative;
+  width: 100%;
+  height: auto;
+  min-height: 80px;
+
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 interface IOutletContext {
@@ -68,11 +103,21 @@ function Twitter() {
   return (
     <Wrapper>
       {!data || !data.length ? (
-        <Tweet>-</Tweet>
+        <NoData>No Data.</NoData>
       ) : (
-        data.map(({ date, user_name, status, status_id }) => (
+        data.slice(0, 10).map(({ date, user_name, status, status_id }) => (
           <Tweet key={status_id}>
             <Status>{status}</Status>
+            <TweetDate>
+              {date
+                ? new Date(date + "").toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })
+                : "-"}
+            </TweetDate>
+            <User>{user_name}</User>
           </Tweet>
         ))
       )}

@@ -9,7 +9,7 @@ const Category = styled.div`
   background-color: ${(props) => props.theme.bgColor};
   > div {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 2fr;
     background-color: ${(props) => props.theme.boardBgColor};
     border-radius: 15px 15px 0 0;
     overflow: hidden;
@@ -18,6 +18,8 @@ const Category = styled.div`
     > div {
       padding: 15px;
       background-color: ${(props) => props.theme.boardTitleBg};
+      white-space: break-spaces;
+      line-break: anywhere;
     }
   }
 `;
@@ -28,7 +30,7 @@ const List = styled.div`
 
   > div {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 2fr;
     background-color: ${(props) => props.theme.boardBgColor};
     gap: 2px;
     border: 2px solid ${(props) => props.theme.boardBgColor};
@@ -41,6 +43,8 @@ const List = styled.div`
     > div {
       padding: 15px;
       background-color: ${(props) => props.theme.bgColor};
+      white-space: break-spaces;
+      line-break: anywhere;
     }
   }
 `;

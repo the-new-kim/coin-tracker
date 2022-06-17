@@ -62,7 +62,7 @@ const TitleAndSearch = styled.div`
 
 const Title = styled(motion.div)`
   h1 {
-    white-space: nowrap;
+    /* white-space: nowrap; */
     overflow: hidden;
     text-overflow: ellipsis;
   }
@@ -203,7 +203,7 @@ function Header() {
             <Search
               key="search"
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              animate={{ opacity: 1, transition: { delay: 0.3 } }}
               exit={{ opacity: 0 }}
               ref={formRef}
               onSubmit={handleSubmit(onValid)}
@@ -217,7 +217,7 @@ function Header() {
             <Title
               key="title"
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              animate={{ opacity: 1, transition: { delay: 0.3 } }}
               exit={{ opacity: 0 }}
             >
               <h1>{siteTitle}</h1>
@@ -246,6 +246,25 @@ function Header() {
         <AnimatePresence initial={false}>
           {isDarkMode ? (
             <DarkModeIcon
+              key="moon"
+              initial={{ y: "100%" }}
+              animate={{ y: "0%", transition: { delay: 0.3, duration: 0.5 } }}
+              exit={{ y: "100%", transition: { duration: 0.5 } }}
+            >
+              <svg
+                version="1.1"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 512 512"
+              >
+                <g>
+                  <g>
+                    <path d="m275.4,500.7c-135,0-244.7-109.8-244.7-244.7 1.06581e-14-134.9 109.8-244.7 244.7-244.7 8.2,0 16.4,0.4 24.6,1.2 7.2,0.7 13.5,5.2 16.5,11.7s2.4,14.2-1.6,20.2c-23,33.8-35.2,73.3-35.2,114.2 0,105 78.7,192.2 183.2,202.6 7.2,0.7 13.5,5.2 16.5,11.7 3.1,6.5 2.4,14.2-1.6,20.2-45.8,67.4-121.4,107.6-202.4,107.6zm-12.5-448c-106.5,6.5-191.2,95.2-191.2,203.3 1.42109e-14,112.3 91.4,203.7 203.7,203.7 56.4,0 109.6-23.4 147.8-63.7-46.2-11.7-88.1-36.8-120.8-72.6-41.1-45.2-63.8-103.6-63.8-164.6 0.1-37.1 8.4-73.2 24.3-106.1z" />
+                  </g>
+                </g>
+              </svg>
+            </DarkModeIcon>
+          ) : (
+            <DarkModeIcon
               key="sun"
               initial={{ y: "100%" }}
               animate={{ y: "0%", transition: { delay: 0.3, duration: 0.5 } }}
@@ -267,25 +286,6 @@ function Header() {
                     <path d="m99,384.1l-16.2,16.2c-8,8-8,20.9 0,28.9 8,8 20.9,8 28.9,0l16.2-16.2c8-8 8-20.9 0-28.9s-20.9-7.9-28.9,0z" />
                     <path d="m413,384.1c-8-8-20.9-8-28.9,0-8,8-8,20.9 0,28.9l16.2,16.2c8,8 20.9,8 28.9,0 8-8 8-20.9 0-28.9l-16.2-16.2z" />
                     <path d="m99,127.9c8,8 20.9,8 28.9,0 8-8 8-20.9 0-28.9l-16.2-16.2c-8-8-20.9-8-28.9,0-8,8-8,20.9 0,28.9l16.2,16.2z" />
-                  </g>
-                </g>
-              </svg>
-            </DarkModeIcon>
-          ) : (
-            <DarkModeIcon
-              key="moon"
-              initial={{ y: "100%" }}
-              animate={{ y: "0%", transition: { delay: 0.3, duration: 0.5 } }}
-              exit={{ y: "100%", transition: { duration: 0.5 } }}
-            >
-              <svg
-                version="1.1"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 512 512"
-              >
-                <g>
-                  <g>
-                    <path d="m275.4,500.7c-135,0-244.7-109.8-244.7-244.7 1.06581e-14-134.9 109.8-244.7 244.7-244.7 8.2,0 16.4,0.4 24.6,1.2 7.2,0.7 13.5,5.2 16.5,11.7s2.4,14.2-1.6,20.2c-23,33.8-35.2,73.3-35.2,114.2 0,105 78.7,192.2 183.2,202.6 7.2,0.7 13.5,5.2 16.5,11.7 3.1,6.5 2.4,14.2-1.6,20.2-45.8,67.4-121.4,107.6-202.4,107.6zm-12.5-448c-106.5,6.5-191.2,95.2-191.2,203.3 1.42109e-14,112.3 91.4,203.7 203.7,203.7 56.4,0 109.6-23.4 147.8-63.7-46.2-11.7-88.1-36.8-120.8-72.6-41.1-45.2-63.8-103.6-63.8-164.6 0.1-37.1 8.4-73.2 24.3-106.1z" />
                   </g>
                 </g>
               </svg>

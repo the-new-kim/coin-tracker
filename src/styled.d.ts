@@ -5,6 +5,7 @@ import "styled-components";
 declare module "styled-components" {
   export interface DefaultTheme {
     bgColor: string;
+    bgColorOpacityZero: string;
     textColor: string;
     border: {
       background: string;

@@ -1,3 +1,5 @@
+import { motion } from "framer-motion";
+import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import styled from "styled-components";
 import { ICoinDetailData } from "../api";
@@ -9,8 +11,53 @@ const Wrapper = styled.div`
   }
 `;
 
-const Description = styled.div`
-  padding: 20px;
+const Description = styled(motion.div)`
+  position: relative;
+  max-height: 300px;
+  > div {
+    width: 100%;
+    height: 100%;
+    max-height: inherit;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    > h3 {
+      margin-top: 50px;
+      margin-bottom: 10px;
+    }
+    > p {
+      white-space: break-spaces;
+      margin-bottom: 50px;
+    }
+  }
+  ::before,
+  ::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 50px;
+
+    left: 0;
+  }
+
+  ::before {
+    top: 0;
+    background: linear-gradient(
+      180deg,
+      ${(props) => props.theme.bgColor} 0%,
+      ${(props) => props.theme.bgColorOpacityZero} 100%
+    );
+  }
+
+  ::after {
+    bottom: 0;
+    background: linear-gradient(
+      0deg,
+      ${(props) => props.theme.bgColor} 0%,
+      ${(props) => props.theme.bgColorOpacityZero} 100%
+    );
+  }
 `;
 
 const Row = styled.div`
@@ -35,11 +82,24 @@ interface IOutletContext {
 
 function Details() {
   const { dataDetail } = useOutletContext<IOutletContext>();
+  // const [descriptionOpen, setDescriptionOpen] = useState(false);
 
   return (
     <Wrapper>
       {dataDetail.description === null ? null : (
-        <Description>{dataDetail.description}</Description>
+        <Description
+        // onClick={() => {
+        //   setDescriptionOpen((prev) => !prev);
+        // }}
+        // initial={{ height: 200 }}
+        // animate={{ height: descriptionOpen ? "auto" : 200 }}
+        // transition={{ type: "tween", duration: 1 }}
+        >
+          <div>
+            <h3>Description</h3>
+            <p>{dataDetail.description}</p>
+          </div>
+        </Description>
       )}
       <Row>
         <div>Started</div>

@@ -1,4 +1,3 @@
-import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 const HomeLoader = styled.div`
@@ -13,20 +12,10 @@ const HomeLoader = styled.div`
 `;
 
 function Loader() {
-  const location = useLocation();
-
   return (
-    <>
-      {location.pathname === "/" ? (
-        <HomeLoader>
-          <h1>Home loading...</h1>
-        </HomeLoader>
-      ) : (
-        <HomeLoader>
-          <h1>Other page loading...</h1>
-        </HomeLoader>
-      )}
-    </>
+    <HomeLoader>
+      <h1>Loading...</h1>
+    </HomeLoader>
   );
 }
 

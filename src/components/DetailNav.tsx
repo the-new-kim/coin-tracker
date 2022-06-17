@@ -3,9 +3,19 @@ import { motion } from "framer-motion";
 import { Link, useMatch } from "react-router-dom";
 import styled from "styled-components";
 
+const Wrapper = styled.div`
+  /* position: sticky;
+  top: 0px; */
+  width: 100%;
+  height: 80px;
+  /* background-color: ${(props) => props.theme.bgColor}; */
+  padding: 10px 0;
+  /* z-index: 10; */
+`;
+
 const Tabs = styled.div`
   width: 100%;
-  min-height: 80px;
+  height: 60px;
   background-color: ${(props) => props.theme.boardBgColor};
   border-radius: 20px;
   margin-bottom: 10px;
@@ -30,26 +40,28 @@ interface IDetailNavProps {
 }
 
 function DetailNav({ id }: IDetailNavProps) {
-  const detailsMatch = useMatch("/:id/details");
+  const detailsMatch = useMatch("/:id/");
   const eventsMatch = useMatch("/:id/events");
   const twitterMatch = useMatch("/:id/twitter");
   const teamMatch = useMatch("/:id/team");
 
   return (
-    <Tabs>
-      <Link to={`/${id}/details`}>
-        <Tab $isMatch={!!detailsMatch}>Details</Tab>
-      </Link>
-      <Link to={`/${id}/events`}>
-        <Tab $isMatch={!!eventsMatch}>Events</Tab>
-      </Link>
-      <Link to={`/${id}/twitter`}>
-        <Tab $isMatch={!!twitterMatch}>Twitter</Tab>
-      </Link>
-      <Link to={`/${id}/team`}>
-        <Tab $isMatch={!!teamMatch}>Team</Tab>
-      </Link>
-    </Tabs>
+    <Wrapper>
+      <Tabs>
+        <Link to={`/${id}/`}>
+          <Tab $isMatch={!!detailsMatch}>Details</Tab>
+        </Link>
+        <Link to={`/${id}/events`}>
+          <Tab $isMatch={!!eventsMatch}>Events</Tab>
+        </Link>
+        <Link to={`/${id}/twitter`}>
+          <Tab $isMatch={!!twitterMatch}>Twitter</Tab>
+        </Link>
+        <Link to={`/${id}/team`}>
+          <Tab $isMatch={!!teamMatch}>Team</Tab>
+        </Link>
+      </Tabs>
+    </Wrapper>
   );
 }
 

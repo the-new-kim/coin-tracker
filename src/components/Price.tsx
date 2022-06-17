@@ -211,8 +211,10 @@ function Price({ id }: IPriceProps) {
             >
               <ButtonIcon
                 initial={{ rotate: 180 }}
-                animate={{ rotate: isChangeOpen ? 0 : 180 }}
-                transition={{ type: "tween" }}
+                animate={{
+                  rotate: isChangeOpen ? 0 : 180,
+                }}
+                transition={{ default: { type: "tween", delay: 0.7 } }}
               >
                 <svg
                   version="1.1"

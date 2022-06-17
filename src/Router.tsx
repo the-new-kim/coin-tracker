@@ -22,7 +22,7 @@ function Router() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path=":id" element={<Detail />}>
-            <Route path="details" element={<Details />} />
+            <Route index element={<Details />} />
             <Route path="events" element={<Events />} />
             <Route path="twitter" element={<Twitter />} />
             <Route path="team" element={<Team />} />

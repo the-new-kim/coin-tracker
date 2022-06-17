@@ -16,7 +16,7 @@ function Search() {
   );
 
   useEffect(() => {
-    setSiteTitle(`Search result of "${keyword}"`);
+    setSiteTitle(`Search results for "${keyword}"`);
   }, [keyword, setSiteTitle]);
 
   return <>{data ? <CoinList data={data.currencies} /> : "no data"}</>;
