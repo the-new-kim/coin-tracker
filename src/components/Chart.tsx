@@ -99,12 +99,12 @@ function Chart() {
               width: 2,
             },
             yaxis: {
-              show: false,
+              show: true,
             },
             xaxis: {
-              axisBorder: { show: false },
-              axisTicks: { show: false },
-              labels: { show: false },
+              axisBorder: { show: true },
+              axisTicks: { show: true },
+              labels: { show: true },
               categories: data.map((ticker) => {
                 const date = new Date(ticker.timestamp).toLocaleDateString(
                   "en-US",
