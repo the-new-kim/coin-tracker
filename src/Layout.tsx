@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Header from "./components/Header";
 import Loader from "./components/Loader";
 import TopBtn from "./components/TopBtn";
+import { LoaderType } from "./components/Loader";
 
 const Wrapper = styled.div`
   position: relative;
@@ -19,7 +20,7 @@ function Layout() {
   return (
     <Wrapper>
       <Header />
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={<Loader loaderType={LoaderType.FULL_SCREEN} />}>
         <Outlet />
       </Suspense>
       <TopBtn />

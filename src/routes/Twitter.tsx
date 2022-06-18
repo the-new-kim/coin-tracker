@@ -3,6 +3,7 @@ import { useQuery } from "react-query";
 import { useOutletContext } from "react-router-dom";
 import styled from "styled-components";
 import { fetchTwitter, ITwitterData } from "../api";
+import Loader, { LoaderType } from "../components/Loader";
 
 const Wrapper = styled.ul`
   display: flex;
@@ -23,31 +24,7 @@ const Tweet = styled(motion.li)`
   grid-template-areas:
     "status status"
     "date user";
-
   gap: 10px;
-  /* * {
-    z-index: 2;
-  } */
-
-  /* ::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: inherit;
-    opacity: 0;
-    background: ${(props) => props.theme.border.hover.background};
-    z-index: 1;
-    transition: opacity ease-out 300ms;
-  }
-
-  :hover {
-    ::after {
-      opacity: 1;
-    }
-  } */
 `;
 
 const Status = styled.p`
@@ -94,34 +71,40 @@ interface IOutletContext {
 
 function Twitter() {
   const { id } = useOutletContext<IOutletContext>();
-  const { data } = useQuery<ITwitterData[]>(
+  const { data, isLoading } = useQuery<ITwitterData[]>(
     ["twitter", id],
     () => fetchTwitter(id),
     { suspense: false }
   );
 
   return (
-    <Wrapper>
-      {!data || !data.length ? (
-        <NoData>No Data.</NoData>
+    <>
+      {isLoading ? (
+        <Loader loaderType={LoaderType.DETAIL} />
       ) : (
-        data.slice(0, 10).map(({ date, user_name, status, status_id }) => (
-          <Tweet key={status_id}>
-            <Status>{status}</Status>
-            <TweetDate>
-              {date
-                ? new Date(date + "").toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                  })
-                : "-"}
-            </TweetDate>
-            <User>{user_name}</User>
-          </Tweet>
-        ))
+        <Wrapper>
+          {!data || !data.length ? (
+            <NoData>No Data.</NoData>
+          ) : (
+            data.slice(0, 10).map(({ date, user_name, status, status_id }) => (
+              <Tweet key={status_id}>
+                <Status>{status}</Status>
+                <TweetDate>
+                  {date
+                    ? new Date(date + "").toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })
+                    : "-"}
+                </TweetDate>
+                <User>{user_name}</User>
+              </Tweet>
+            ))
+          )}
+        </Wrapper>
       )}
-    </Wrapper>
+    </>
   );
 }
 

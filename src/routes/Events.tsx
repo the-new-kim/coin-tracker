@@ -2,6 +2,7 @@ import { useQuery } from "react-query";
 import { useOutletContext } from "react-router-dom";
 import styled from "styled-components";
 import { fetchEvents, IEventsData } from "../api";
+import Loader, { LoaderType } from "../components/Loader";
 
 const Category = styled.div`
   position: sticky;
@@ -27,7 +28,6 @@ const Category = styled.div`
 const List = styled.div`
   display: flex;
   flex-direction: column;
-
   > div {
     display: grid;
     grid-template-columns: 1fr 2fr;
@@ -55,7 +55,7 @@ interface IOutletContext {
 
 function Events() {
   const { id } = useOutletContext<IOutletContext>();
-  const { data } = useQuery<IEventsData[]>(
+  const { data, isLoading } = useQuery<IEventsData[]>(
     ["events", id],
     () => fetchEvents(id),
     { suspense: false }
@@ -63,35 +63,41 @@ function Events() {
 
   return (
     <>
-      <Category>
-        <div>
-          <div>Date</div>
-          <div>Event description</div>
-        </div>
-      </Category>
-      <List>
-        {!data || !data.length ? (
-          <div>
-            <div>-</div>
-            <div>-</div>
-          </div>
-        ) : (
-          data.map(({ id, date, description }) => (
-            <div key={id}>
-              <div>
-                {date
-                  ? new Date(date + "").toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })
-                  : "-"}
-              </div>
-              <div>{description ? description : "-"}</div>
+      {isLoading ? (
+        <Loader loaderType={LoaderType.DETAIL} />
+      ) : (
+        <>
+          <Category>
+            <div>
+              <div>Date</div>
+              <div>Event description</div>
             </div>
-          ))
-        )}
-      </List>
+          </Category>
+          <List>
+            {!data || !data.length ? (
+              <div>
+                <div>-</div>
+                <div>-</div>
+              </div>
+            ) : (
+              data.map(({ id, date, description }) => (
+                <div key={id}>
+                  <div>
+                    {date
+                      ? new Date(date + "").toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })
+                      : "-"}
+                  </div>
+                  <div>{description ? description : "-"}</div>
+                </div>
+              ))
+            )}
+          </List>
+        </>
+      )}
     </>
   );
 }

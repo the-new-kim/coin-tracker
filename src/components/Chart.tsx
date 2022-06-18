@@ -7,18 +7,11 @@ import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { fetchHistoricalTickers, HistoricalTickersRange } from "../api";
 import { isDarkModeAtom } from "../atoms";
+import Loader, { LoaderType } from "../components/Loader";
 
 const Wrapper = styled.div`
   width: 100%;
   padding: 10px;
-`;
-
-const Loader = styled(motion.div)`
-  width: 100%;
-  aspect-ratio: 1.53 / 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 const RangeTabs = styled.div`
@@ -63,15 +56,6 @@ interface IHistoricalTickersData {
   market_cap: number;
 }
 
-const loaderVariants = {
-  initial: {
-    opacity: 0,
-  },
-  animate: {
-    opacity: 1,
-  },
-};
-
 function Chart() {
   const { id } = useParams();
   const isDarkMode = useRecoilValue(isDarkModeAtom);
@@ -89,14 +73,7 @@ function Chart() {
   return (
     <Wrapper>
       {loading ? (
-        <Loader
-          variants={loaderVariants}
-          initial="initial"
-          animate="animate"
-          exit="initial"
-        >
-          Loading...
-        </Loader>
+        <Loader loaderType={LoaderType.CHART} />
       ) : (
         <ReactApexChart
           type="line"
