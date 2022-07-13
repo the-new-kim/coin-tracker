@@ -1,5 +1,5 @@
 {
-  "name": "react-coin-tracker2",
+  "name": "coin-tracker",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -56,5 +56,5 @@
     "@types/react-helmet": "^6.1.5",
     "@types/styled-components": "^5.1.25"
   },
-  "homepage": "https://the-new-kim.github.io/react-coin-tracker2/"
+  "homepage": "https://the-new-kim.github.io/coin-tracker/"
 }
