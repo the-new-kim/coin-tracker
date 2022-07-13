@@ -21,4 +21,4 @@ a coin tracking app made after watching the react master class course of [Nomad 
 
 ## Page Link
 
-[Link](https://the-new-kim.github.io/to-do-list/)
+[Link](https://the-new-kim.github.io/coin-tracker/)
