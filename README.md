@@ -21,6 +21,6 @@ built with React
 - `react-scripts`
 - `recoil`
 
-## Reference
+## References
 
 [Nomad Coders](https://nomadcoders.co/)
