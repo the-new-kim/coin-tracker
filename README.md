@@ -2,7 +2,7 @@
 
 built with React
 
-[View Live](https://the-new-kim.github.io/coin-tracker/)
+[View Live](https://the-new-kim.github.io/coin-tracker/)👈
 
 ## Features
 
