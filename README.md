@@ -1,6 +1,8 @@
 # Coin Tracker
 
-a coin tracking app made after watching the react master class course of [Nomad Coders](https://nomadcoders.co/).
+built with React
+
+[View Live](https://the-new-kim.github.io/coin-tracker/)
 
 ## Features
 
@@ -8,7 +10,7 @@ a coin tracking app made after watching the react master class course of [Nomad 
 - infinite scroll
 - dark mode
 
-## Liberies
+## Libraries
 
 - `framer-motion`
 - `react-apexcharts`
@@ -19,6 +21,6 @@ a coin tracking app made after watching the react master class course of [Nomad 
 - `react-scripts`
 - `recoil`
 
-## Page Link
+## Course
 
-[Link](https://the-new-kim.github.io/coin-tracker/)
+[Nomad Coders](https://nomadcoders.co/)
