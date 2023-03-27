@@ -1,17 +1,40 @@
 # Coin Tracker
 
-![coin tracker](https://res.cloudinary.com/dx06ztif0/image/upload/v1679449377/Screen_Recording_2023-03-22_at_10.38.15_jlf5th.gif)
+![main](https://res.cloudinary.com/dx06ztif0/image/upload/v1679449377/Screen_Recording_2023-03-22_at_10.38.15_jlf5th.gif)
 
 ## [View Live](https://the-new-kim.github.io/coin-tracker/) 👈
 
+`react`
+`typescript`
 `framer-motion`
+`recoil`
+`react-query`
+`react-hook-form`
 `react-apexcharts`
 `react-helmet`
-`react-hook-form`
-`react-query`
 `react-router-dom`
-`react-scripts`
-`recoil`
+
+- Read the document in [English](#en) or [한국어](#kr)
+- [Gallery](#gallery)
+
+# EN
+
+## Project Overview:
+
+Coin tracking application using the Coin Paprika API.
+
+## What I did:
+
+- Fetching real-time coin data from the API and displaying it to the client
+- Displaying charts by period from 1 week to 6 months using Apexcharts
+- Implementing infinite scroll
+- Adding a search function
+
+## Conclusion:
+
+- Data caching and simplification of code using React Query
+
+# KR
 
 ## Project Overview:
 
@@ -27,3 +50,8 @@ Coin paprika api를 이용한 Coin Tracking application.
 ## Conclusion:
 
 - React query를 통한 데이터 캐싱과 코드의 간소화
+
+## Gallery:
+
+![gallery1](https://res.cloudinary.com/dx06ztif0/image/upload/v1679449380/Screen_Recording_2023-03-22_at_10.38.15_3_prngwu.gif)
+![gallery2](https://res.cloudinary.com/dx06ztif0/image/upload/v1679449377/Screen_Recording_2023-03-22_at_10.38.15_2_rbnetn.gif)
